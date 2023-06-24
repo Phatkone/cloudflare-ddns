@@ -9,4 +9,4 @@ Execute.
 GNU GPL 3.0 applies
 
 ## Author 
-(Phatkone / Ashikabi)[https://github.com/phatkone]
+ [Phatkone](https://github.com/Phatkone)
