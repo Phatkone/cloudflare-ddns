@@ -28,7 +28,7 @@ def initiate_session(headers: dict) -> requests.Session:
     return session
 
 def get_gateway_id(session: requests.Session, uri: str, gw_name: str, verify: bool = True):
-  r = session.get("{}.format(uri), verify=verify)
+  r = session.get(uri, verify=verify)
   if r.status_code != 200:
     print("Whoops... {}".format(session.text))
   js = r.json()
