@@ -37,7 +37,7 @@ def get_gateway_id(session: requests.Session, uri: str, gw_name: str, verify: bo
       return record['id'], record['networks']
   return False, False
 
-def update_gateway(session: requests.Session, gw_name: str, networks: list, verify: bool = True) -> bool|dict:
+def update_gateway(session: requests.Session, uri, gw_name: str, networks: list, verify: bool = True) -> bool|dict:
     data = {
         'name': gw_name,
         'networks': networks
