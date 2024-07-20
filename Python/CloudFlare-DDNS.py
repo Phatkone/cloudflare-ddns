@@ -39,7 +39,7 @@ def get_record_ids(session: requests.Session, uri: str, fqdn: str, verify: bool 
             continue
         for record in js['result']:
             if record['name'] == fqdn and record['type']:
-                records[t].append({'type': t, 'id': record['id'], 'ip': record['content']})
+                records[t].append({'type': t, 'id': record['id'], 'ip': record['content'], 'name': record['name']})
     return records if len(records) > 0 else False
 
 def create_dns_record(session: requests.Session, uri: str, fqdn:str, ip_address: str, proxied: bool, ttl: int, r_type: str = "A", verify: bool = True) -> bool|dict:
