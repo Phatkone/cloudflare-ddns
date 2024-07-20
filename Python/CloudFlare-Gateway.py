@@ -34,13 +34,14 @@ def get_gateway_id(session: requests.Session, uri: str, gw_name: str, verify: bo
   js = r.json()
   for record in js['result']:
     if record['name'] == gw_name:
-      return record['id'], record['networks']
-  return False, False
+      return record['id'], record['networks'], record['client_default']
+  return False, False, False
 
-def update_gateway(session: requests.Session, uri, gw_name: str, networks: list, verify: bool = True) -> bool|dict:
+def update_gateway(session: requests.Session, uri, gw_name: str, networks: list, client_default: str, verify: bool = True) -> bool|dict:
     data = {
         'name': gw_name,
-        'networks': networks
+        'networks': networks,
+        'client_default': client_default
     }
     r = session.put(uri, data = json.dumps(data), verify = verify)
     if r.status_code > 299:
@@ -55,7 +56,7 @@ def main(account_id: str, gateway_name: str, api_token:str, verify: bool = True)
 
     session = initiate_session({"Authorization":"Bearer {}".format(api_token), "Content-Type": "application/json"})
     uri = "https://api.cloudflare.com/client/v4/accounts/{}/gateway/locations".format(account_id)
-    gateway_id, gateway_networks = get_gateway_id(session, uri, gateway_name, verify)
+    gateway_id, gateway_networks, client_default = get_gateway_id(session, uri, gateway_name, verify)
     ips = get_public_ip('ipv4', verify)
     if gateway_id != False:
       match = False
@@ -71,7 +72,7 @@ def main(account_id: str, gateway_name: str, api_token:str, verify: bool = True)
           }
         ]
         print("Updating Gateway")
-        update_gateway(session, "{}/{}".format(uri, gateway_id), gateway_name, gateway_networks, verify)
+        update_gateway(session, "{}/{}".format(uri, gateway_id), gateway_name, gateway_networks, client_default, verify)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
